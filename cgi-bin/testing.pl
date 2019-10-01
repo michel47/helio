@@ -1,11 +1,10 @@
 #!/usr/bin/perl
 
 print "Content-Type: text/html\r\n\r\n";
-our $dbug=$1 if $ENV{QUERY_STRING} =~ m/dbug=(\d+)/;
 
-if ($dbug) {
+if (0) {
    print "<pre>"; # display environment ...
-   foreach (sort grep /(SCRIPT|PATH_|USER\b|QUERY|HTTP_|REMOTE)/, keys %ENV) {
+   foreach (sort grep /(SCRIPT|PATH_)/, keys %ENV) {
       printf "%s: %s\n",$_,$ENV{$_};
    }
    print "</pre>\n";

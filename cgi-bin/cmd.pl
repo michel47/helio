@@ -1,6 +1,7 @@
 
 my $home = "/home/michelc";
 chdir $home;
+system "ls -l accessr-logs";
 system "ls -l /etc/apache2/logs/access_log /etc/apache2/logs/error_log";
 print ".\n";
 print "access_log\n";

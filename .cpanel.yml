@@ -4,3 +4,4 @@ deployment:
     - export DEPLOYPATH=/home/michelc/public_html/
     - cp -p index.html $DEPLOYPATH
     - cp -p style.css $DEPLOYPATH
+    - rsync -avuz cgi-bin $DEPLOYPATH/cgi-bin

@@ -16,6 +16,8 @@ git pull
 
 # deploy ...
 cd ~/public_html
+rsync -avuz ../repositories/helio/index.html .
+rsync -avuz ../repositories/helio/style.css .
 rsync -avuz ../repositories/helio/cgi-bin/ cgi-bin
 rsync -avuz ../repositories/helio/cgi/ cgi
 #rm cgi-bin

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<title>{{page.title}}</title>
+
+
+{{ content }}
+
+
+<script src="/js/sub.js"></script>
+
+<script type="application/javascript">
+function getip(json){
+  alert(json.ip); // alerts the ip address
+}
+</script>
+
+<script type="application/javascript" src="cgi-bin/jsonip.pl/?callback=getip"></script>

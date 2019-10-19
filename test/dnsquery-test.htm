@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+
+<hr>
+<p>send the json data to dnsquery ...
+<form action=../cgi-bin/dnsquery.pl?fmt=json method=GET>
+dbug: <input name=dbug type=checkbox value=1>
+<br>json: <input name=json size=80 type=text value='{"Domain":"_json.technologytm.gq","Type":"TXT"}'>
+<input name=submit type=submit value="OK">
+</form>
+<hr>
+<form action=../cgi-bin/dnsquery.pl?fmt=json&dbug=0 method=POST>
+domain: <input name=domain type=text value="_config.technologytm.gq">
+<br>type: <input name=type type=text value="TXT">
+<br><input name=submit type=submit value="OK">
+</form>
+<hr>
+
+

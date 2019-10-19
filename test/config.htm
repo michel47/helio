@@ -23,12 +23,24 @@
 let hostname = document.location.hostname
 let domain = hostname.replace(/www./,'');
 
- DNS.Query('config.'+domain,'TXT', callback('result'))
+if (domain = '127.0.0.1') {
+ DNS.Query('_json.technologytm.gq','TXT', callback('result'))
+} else {
+ DNS.Query('_json.'+domain,'TXT', callback('result'))
+}
 
 function callback(id) {
    var display = function(json) {
+   var map = [];
    console.log(json);
    var rr = json.rr
+   for(let i=0; i<rr.length; i++) {
+    txt = decode(rr[i]['txtdata']);
+    console.log('txt['+i+']='+txt);
+    //map = JSON.parse(txt);
+    //console.log(map);
+   }
+   
    var buf = '<br>'+json.query.domain+' ('+json['status']+') #'+rr.length+'\n<ol>'
    if (json['status'] == 'ok') {
    for(let i=0; i<rr.length; i++) {
@@ -41,6 +53,12 @@ function callback(id) {
    document.getElementById(id).innerHTML = buf;
    }
    return display
+}
+
+function decode(str) {
+  return str.replace(/\\(\d{3})/g, function(match, dec) {
+				return String.fromCharCode(dec);
+	});
 }
 
 </script>

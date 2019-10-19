@@ -27,7 +27,11 @@ const status = resp => {
 function dnscall(request,callback) {
         var url = "../cgi-bin/dnsquery.pl?fmt=json";
         console.log(request);
-        fetch(url, { method: "POST", body: JSON.stringify(request) })
+        fetch(url, { method: "POST",
+                     headers:{'Content-Type': 'application/json'},
+                     body: JSON.stringify(request),
+                     mode: 'cors'
+                   })
         .then( status )
         .then( resp => {
          console.log(resp);

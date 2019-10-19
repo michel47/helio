@@ -6,6 +6,7 @@ if (exists $ENV{QUERY_STRING}) {
    my @params = split /\&/,$ENV{QUERY_STRING};
    foreach my $e (@params) {
       my ($p,$v) = split/=/,$e;
+      $v =~ s/%(..)/chr(hex($1))/eg; # unhtml-ize (urldecoded)
       $query->{$p} = $v; 
    }   
 }
@@ -38,10 +39,14 @@ my $post;
 local $/ = undef; # /!\ destroy DNS read ...
    $post = <STDIN>;
 }
-#printf "DBUG: [%s]\n",join"\n",&get_rrecord('exemple.com','A');
+#printf "DBUG: [%s]\n",join"\n",Dump(&get_rrecord('exemple.com','A'));
+#printf "DBUG: query=[%s]\n",join"\n",Dump($query); exit;
+#printf "X-CONTENT_TYPE: %s\n",$ENV{CONTENT_TYPE};
+printf "X-post: %s\n",$post;
 
 if ($ENV{CONTENT_TYPE} eq 'application/x-www-form-urlencoded') {
-  print "Content-Type: text/plain; charset=utf-8\r\n\r\n";
+#  print "Content-Type: text/plain; charset=utf-8\r\n\r\n";
+#  printf "post: %s\n",$post if $dbug;
   my @params = split /\&/,$post;
    foreach my $e (@params) {
       my ($p,$v) = split/=/,$e;
@@ -49,6 +54,7 @@ if ($ENV{CONTENT_TYPE} eq 'application/x-www-form-urlencoded') {
       $v =~ s/%(..)/chr(hex($1))/eg; # unhtml-ize (urldecoded)
       $query->{$p} = $v; 
   }   
+#  printf "query: [%s]\n",Dump($query) if $dbug;
 }
 
 if ($query->{echo}) {
@@ -58,11 +64,13 @@ if ($query->{echo}) {
 } else {
     my $jspost;
     if ($query->{json}) {
-#     printf "json: %s\n",$query->{json};
+#     printf "json: %s\n",$query->{json} if $dbug;
       $jspost = decode_json($query->{json});
-    } elsif ($post) {
+    } elsif ($ENV{CONTENT_TYPE} eq 'application/json') {
       $jspost = decode_json($post);
     }
+   printf "jspost: %s\n",Dump($jspost) if $dbug;
+    # only Domain and Type keys are copied from the json object
     $query->{domain} = $jspost->{Domain} if exists $jspost->{Domain};
     $query->{type} = $jspost->{Type} if exists $jspost->{Type};
     printf "X-query: %s %s\n",$query->{domain},$query->{type};

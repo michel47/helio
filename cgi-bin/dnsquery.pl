@@ -29,7 +29,7 @@ if (exists $ENV{HTTP_ORIGIN}) {
 # ---------------------------------------------------------
 use if -e '/usr/local/share/perl5/cPanelUserConfig.pm', cPanelUserConfig;
 if (-e '/usr/local/share/perl5/cPanelUserConfig.pm') {
-  use lib $ENV{HOME}.'/repositories';
+  use lib '/home/michelc/repositories'; # /!\\ needs absolute path ...
 } else {
   use lib $ENV{SITE}.'/lib';
 }

@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+
 my $query = {}; 
 our $dbug = $1 if ($ENV{QUERY_STRING} =~ m/dbug=(\d+)/);
 if (exists $ENV{QUERY_STRING}) {
@@ -14,6 +15,8 @@ if ($dbug) {
    use YAML::Syck qw(Dump);
    binmode(STDOUT);
    print "Content-Type: text/plain\r\n\r\n";
+
+   printf "X-INC: %s\n",join',',@INC;
 } 
 
 # ---------------------------------------------------------
@@ -24,8 +27,9 @@ if (exists $ENV{HTTP_ORIGIN}) {
   print "Access-Control-Allow-Origin: *\n";
 }
 # ---------------------------------------------------------
-use lib $ENV{SITE}.'/lib';
-use DNS qw(get_rrecord);
+use if -e '/usr/local/share/perl5/cPanelUserConfig.pm', cPanelUserConfig;
+use lib '../../../repositories';
+use Brewed::DNS qw(get_rrecord);
 # A : 1, NS : 2, MD : 3, MF : 4, CNAME : 5, SOA : 6,
 # MB : 7, MG : 8, MR : 9, NULL : 10, WKS : 11,
 # PTR : 12, HINFO : 13, MINFO : 14, MX : 15, TXT : 16, RP : 17,

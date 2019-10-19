@@ -28,11 +28,10 @@ if (exists $ENV{HTTP_ORIGIN}) {
 }
 # ---------------------------------------------------------
 use if -e '/usr/local/share/perl5/cPanelUserConfig.pm', cPanelUserConfig;
-if (! -e '/usr/local/share/perl5/cPanelUserConfig.pm') {
-if (exist $ENV{SITE}) {
-  use lib $ENV{SITE}.'/lib';
-} else {
+if (-e '/usr/local/share/perl5/cPanelUserConfig.pm') {
   use lib $ENV{HOME}.'/repositories';
+} else {
+  use lib $ENV{SITE}.'/lib' if (exist $ENV{SITE});
 }
 use Brewed::DNS qw(get_rrecord);
 # A : 1, NS : 2, MD : 3, MF : 4, CNAME : 5, SOA : 6,

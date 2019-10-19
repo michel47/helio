@@ -2,7 +2,7 @@
 <pre>
 Info about a site (<span id=node>example.com</span>):
 
-<input name=node placeholder="example.com" OnChange="change(this);"/>
+<input name=node placeholder="example.com" onchange="change(this);"/>
 
 A: <span id=A>N/A</span>
 CNAME: <span id=CNAME>N/A</span>
@@ -51,7 +51,7 @@ function change(obj) {
  DNS.Query('_json.'+node,'TXT', callback('json'))
  DNS.Query('_expires.'+node,'TXT', callback('expires'))
  DNS.Query('info.'+node,'TXT', callback('info'))
- DNS.Query('config.'+node,'TXT', callback('config'))
+ DNS.Query('_config.'+node,'TXT', callback('config'))
  DNS.Query('contact.'+node,'RP', callback('RP'))
  DNS.Query('contact.'+node,'TXT', callback('contact'))
  DNS.Query(node,'ANY', callback('ANY'))

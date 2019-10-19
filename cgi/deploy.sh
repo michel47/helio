@@ -1,6 +1,8 @@
 #
 
 # https://iph.heliohost.org/cgi/testing.pl/cmd.pl
+echo "deployement $$"
+date
 set -e
 set -x
 cd ~/repositories/helio

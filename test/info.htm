@@ -1,0 +1,88 @@
+<meta charset="utf8"/>
+<pre>
+Info about a site (<span id=node>example.com</span>):
+
+<input name=node placeholder="example.com" OnChange="change(this);"/>
+
+A: <span id=A>N/A</span>
+CNAME: <span id=CNAME>N/A</span>
+MX: <span id=MX>N/A</span>
+qm: <span id=qm>QmHash</span>
+json: <span id=json>N/A</span>
+
+Expires: <span id=expires>N/A</span>
+Info: <span id=info>N/A</span>
+Config: <span id=config>N/A</span>
+Contact: <span id=contact>N/A</span>
+RP: <span id=RP>N/A</span>
+
+TXT: <span id=TXT>N/A</span>
+ANY: <span id=ANY>N/A</span>
+
+</pre>
+
+<script src="../js/dns.js"></script>
+<script>
+var node;
+var params = new URLSearchParams(location.search)
+if (params.has('domain')) {
+ node = params.get('domain')
+ input = document.getElementsByTagName('input')[0]
+ input.value = node; change(input)
+ console.log(params.toString())
+}
+
+
+let hostname = location.hostname
+let domain = hostname.replace(/www./,'');
+
+   console.log(location.pathname)
+
+
+function change(obj) {
+ node = obj.value
+ console.log('node: '+node)
+ document.getElementById('node').innerHTML = node
+ DNS.Query(node,'TXT', callback('TXT'))
+ DNS.Query(node,'A', callback('A'))
+ DNS.Query('www.'+node,'CNAME', callback('CNAME'))
+ DNS.Query(node,'MX', callback('MX'))
+ DNS.Query('_dnslink.'+node,'TXT', callback('qm'))
+ DNS.Query('_json.'+node,'TXT', callback('json'))
+ DNS.Query('_expires.'+node,'TXT', callback('expires'))
+ DNS.Query('info.'+node,'TXT', callback('info'))
+ DNS.Query('config.'+node,'TXT', callback('config'))
+ DNS.Query('contact.'+node,'RP', callback('RP'))
+ DNS.Query('contact.'+node,'TXT', callback('contact'))
+ DNS.Query(node,'ANY', callback('ANY'))
+}
+
+function callback(id) {
+   var display = function(json) {
+   console.log(json);
+   var rr = json.rr
+   //var buf = '<br>'+json.query.domain+' ('+json['status']+') #'+rr.length+'\n<ol>'
+   var buf = ''
+   if (json['status'] == 'ok') {
+      if (rr.length == 1) {
+         if (id == 'qm') {
+            dnslink = rr[0]['txtdata'].replace('dnslink=','');
+            buf = '<a href=http://127.0.0.1:8080'+dnslink+'>'+dnslink+'</a>'
+         } else {
+            buf += rr[0]['plain']
+         }
+      } else {
+         for(let i=0; i<rr.length; i++) {
+            buf += '<br>'+rr[i]['plain']
+         }
+      }
+   } else {
+      buf += rr[0]['error']
+   }
+   document.getElementById(id).innerHTML = buf;
+   }
+   return display
+}
+
+</script>
+

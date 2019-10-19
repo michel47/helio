@@ -1,0 +1,46 @@
+<!DOCTYPE html><meta charset="utf8"/>
+<!--
+ see also [*](https://www.w3schools.com/code/tryit.asp?filename=G8LK95N932PQ)
+-->
+
+<h2>Host confing via DNS record &amp; javascript : using <a href=../js/dns.js>dns.js</a></h2>
+
+<div id=result>result</div>
+
+
+<!---
+<h3>dbug</h3>
+<form action="../cgi-bin/dnsquery.pl" method="POST">
+<input name=json type="text" value='{"Domain":"google.com","Type":"A"}'>
+<input type=submit value=submit>
+</form>
+-->
+
+<div id=dns></div>
+
+<script src=../js/dns.js></script>
+<script>
+let hostname = document.location.hostname
+let domain = hostname.replace(/www./,'');
+
+ DNS.Query('config.'+domain,'TXT', callback('result'))
+
+function callback(id) {
+   var display = function(json) {
+   console.log(json);
+   var rr = json.rr
+   var buf = '<br>'+json.query.domain+' ('+json['status']+') #'+rr.length+'\n<ol>'
+   if (json['status'] == 'ok') {
+   for(let i=0; i<rr.length; i++) {
+      buf += '<li>'+rr[i]['plain']
+   }
+   } else {
+   buf += '<li> '+json['status']+' '+rr[0]['error']
+   }
+   buf += '</ol>'
+   document.getElementById(id).innerHTML = buf;
+   }
+   return display
+}
+
+</script>

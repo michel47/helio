@@ -1,0 +1,92 @@
+<!DOCTYPE html><meta charset="utf8"/>
+<!--
+ see also [*](https://www.w3schools.com/code/tryit.asp?filename=G8LK95N932PQ)
+-->
+
+<h2>DNS record via javascript : using <a href=../js/dns.js>dns.js</a></h2>
+
+<hr>
+<code><pre>
+DNS.Query('iph.heliohost.org','ANY', callback('helio'))
+
+function callback(id) {
+   var display = function(json) {
+   console.log(json);
+   var rr = json.rr
+   var buf = '&lt;br>'+json.query.domain+' ('+json['status']+') #'+rr.length+'\n&lt;ol>'
+   for(let i=0; i&lt;rr.length; i++) {
+      buf += '&lt;li>'+rr[i]['plain']
+   }
+   buf += '&lt;/ol>'
+   document.getElementById(id).innerHTML = buf;
+   }
+   return display
+}
+</pre></code>
+<hr>
+
+<h4>410™ record : </h4>
+<span id=410TM></span>
+
+<h4>localhost record : </h4>
+<span id=localhost></span>
+
+<h4>domain record : </h4>
+<span id=domain></span>
+
+<h4>hostname record : </h4>
+<span id=hostname></span>
+
+<h4>helio record :</h4>
+<span id=helio></span>
+
+<h4>GC-Bank ANY record:</h4>
+<span id=gcb></span>
+
+<h4>SHQB ANY record : </h4>
+<span id=shqb></span>
+
+
+
+<!---
+<h3>dbug</h3>
+<form action="../cgi-bin/dnsquery.pl" method="POST">
+<input name=json type="text" value='{"Domain":"google.com","Type":"A"}'>
+<input type=submit value=submit>
+</form>
+-->
+
+<div id=dns></div>
+
+<script src=../js/dns.js></script>
+<script>
+let hostname = document.location.hostname
+let domain = hostname.replace(/www./,'');
+
+ DNS.Query('contact.410TM.gq','TXT', callback('410TM'))
+ DNS.Query('iph.heliohost.org','ANY', callback('helio'))
+ DNS.Query('shqb.ml','ANY', callback('shqb'))
+ DNS.Query('localhost','A', callback('localhost'))
+ DNS.Query(domain,'ANY', callback('domain'))
+ DNS.Query(hostname,'ANY', callback('hostname'))
+ DNS.Query('gc-bank.org.','ANY', callback('gcb'))
+
+function callback(id) {
+   var display = function(json) {
+   console.log(json);
+   var rr = json.rr
+   var buf = '<br>'+json.query.domain+' ('+json['status']+') #'+rr.length+'\n<ol>'
+   if (json['status'] == 'ok') {
+   for(let i=0; i<rr.length; i++) {
+      buf += '<li>'+rr[i]['plain']
+   }
+   } else {
+   buf += '<li> '+json['status']+' '+rr[0]['error']
+   }
+   buf += '</ol>'
+   document.getElementById(id).innerHTML = buf;
+   }
+   return display
+}
+
+</script>

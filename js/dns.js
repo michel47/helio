@@ -27,7 +27,11 @@ const status = resp => {
 }
 
 function dnscall(request,callback) { // using local gateway ...
-        let apisvr = 'https://iph.heliohost.org';
+        let apisvr = 'http://127.0.0.1:8088/repositories/helio';
+            console.log(document.location.hostname);
+        if (document.location.hostname != '127.0.0.1') {
+          // apisvr = 'https://iph.heliohost.org';
+        }
         var url = apisvr+'/cgi-bin/dnsquery.pl?fmt=json';
         console.log(request);
         fetch(url, { method: "POST",

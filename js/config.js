@@ -33,7 +33,7 @@ function callback(tag) {
       txt = decode(rr[i]['txtdata']);
       console.log('txt['+i+']='+txt);
     } else {
-      txt = '{"name":"json config record","status":"empty","note":"pass it forward!","framaid":"jsonconf","qm":"z6cYNbecZSFzLjbSimKuibtdpGt7DAUMMt46aKQNdwfs"}'
+      txt = '{"title":"JSon Config Record","name":"JSonCFG","status":"empty","note":"pass it forward!","framaid":"jsonconf","qm":"z6cYNbecZSFzLjbSimKuibtdpGt7DAUMMt46aKQNdwfs"}'
     }
       map = JSON.parse(txt);
       console.log(map);

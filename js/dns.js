@@ -1,6 +1,8 @@
 // DNS-JS.com - Make DNS queries from Javascript
 // Copyright 2019 Infinite Loop Development Ltd - InfiniteLoop.ie
 // Do not remove this notice.
+//
+// Modified by Michel G. Combes Copyleft 2019
 
 DNS = {
     Query: function (domain, type, callback) {
@@ -12,9 +14,9 @@ DNS = {
         },
         callback);
     },
-    //dnsapi: callapi,
     //dnsapi: echo
     dnsapi: dnscall
+    //dnsapi: callapi
 };
 
 const status = resp => {
@@ -24,7 +26,7 @@ const status = resp => {
   return Promise.reject(new Error(resp.statusText))
 }
 
-function dnscall(request,callback) {
+function dnscall(request,callback) { // using local gateway ...
         var url = "../cgi-bin/dnsquery.pl?fmt=json";
         console.log(request);
         fetch(url, { method: "POST",
@@ -43,7 +45,7 @@ function dnscall(request,callback) {
         .catch( e => { console.error(e) } )
 }
 
-function echo(request,callback) {
+function echo(request,callback) { // for debug purpose ...
         var url = "../cgi-bin/echo.pl";
         fetch(url, { method: "POST", body: JSON.stringify(request) })
         .then( status )
@@ -57,7 +59,7 @@ function echo(request,callback) {
         .catch( e => { console.error(e) } )
 }
 
-function callapi(request,callback) {
+function callapi(request,callback) { // using the orginal gateway ...
      var url = 'https://www.dns-js.com/api.aspx';
      var xhr = new XMLHttpRequest();
         xhr.open("POST", url);

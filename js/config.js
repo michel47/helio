@@ -9,8 +9,6 @@ DNS.Query('_json.'+domain,'TXT', callback('body'))
 
 */
 
- */
-
 var hostname = document.location.hostname;
 var domain = hostname.replace(/www./,'');
 var loc = document.location.toString();

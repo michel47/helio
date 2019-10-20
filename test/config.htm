@@ -24,7 +24,7 @@ rr: %rr% </div>
 <script src=../js/config.js></script>
 <script>
 
-if (domain = '127.0.0.1') {
+if (domain == '127.0.0.1') {
  DNS.Query('_json.technologytm.gq','TXT', callback('dns'))
 } else {
  DNS.Query('_json.'+domain,'TXT', callback('body'))

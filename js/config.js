@@ -1,5 +1,14 @@
 /* this js script that the _json.%domain% DNSi TXT record 
    and use it as a map to substitute keywords ...
+
+ usage :
+
+<script src=https://cdn.jsdelivr.net/gh/iglake/js@1.6/dist/dns.js></script>
+<script src=https://cdn.jsdelivr.net/gh/iglake/js@1.6/dist/config.js ></script>
+DNS.Query('_json.'+domain,'TXT', callback('body'))
+
+*/
+
  */
 
 var hostname = document.location.hostname;
@@ -14,12 +23,6 @@ if (typeof(e) != 'undefined') {
   url = e.href;
 } else {
   url = 'http://ipfs.blockringtm.ml';
-}
-
-if (domain = '127.0.0.1') {
- DNS.Query('_json.blockringtm.ml','TXT', callback('body'))
-} else {
- DNS.Query('_json.'+domain,'TXT', callback('body'))
 }
 
 function callback(tag) {

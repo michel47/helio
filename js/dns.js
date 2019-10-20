@@ -27,7 +27,8 @@ const status = resp => {
 }
 
 function dnscall(request,callback) { // using local gateway ...
-        var url = "../cgi-bin/dnsquery.pl?fmt=json";
+        let apisvr = 'https://iph.heliohost.org';
+        var url = apisvr+'/cgi-bin/dnsquery.pl?fmt=json';
         console.log(request);
         fetch(url, { method: "POST",
                      headers:{'Content-Type': 'application/json'},

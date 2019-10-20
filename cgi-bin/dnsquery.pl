@@ -21,7 +21,7 @@ if ($dbug) {
 
 # ---------------------------------------------------------
 # CORS header
-if (exists $ENV{HTTP_ORIGIN}) {
+if (exists $ENV{HTTP_ORIGIN} && $ENV{HTTP_ORIGIN} ne '') {
   printf "Access-Control-Allow-Origin: %s\n",$ENV{HTTP_ORIGIN};
 } else {
   print "Access-Control-Allow-Origin: *\n";

@@ -84,16 +84,16 @@ if ($query->{echo}) {
     printf "X-query: %s %s\n",$query->{domain},$query->{type};
 }
 
-
+my $ip = $ENV{REMOTE_ADDR} if exists $ENV{REMOTE_ADDR};
 my ($domain,$type) = ($query->{domain},$query->{type});
 my $rr = &get_rrecord($domain,$type);
 #printf "--- # rr %s...\n",Dump($rr) if ($ENV{TERM} =~ /xterm/);
 
 my $resp;
 if (exists $rr->[0]{error}) {
- $resp = { query => $query, status => 'error', errormsg => $rr->[0]{error}, rr => $rr };
+ $resp = { ip => $ip, tics => $^T, query => $query, status => 'error', errormsg => $rr->[0]{error}, rr => $rr };
 } else {
- $resp = { query => $query, status => 'ok',n => scalar(@{$rr}), rr => $rr };
+ $resp = { ip => $ip, tics => $^T, query => $query, status => 'ok',n => scalar(@{$rr}), rr => $rr };
 }
 printf "--- # resp %s...\n",Dump($espr) if ($ENV{TERM} =~ /xterm/);
 
@@ -101,7 +101,7 @@ my $jsresp = encode_json( $resp );
 
 $jsresp =~ s/,/,\n/g if $dbug;
 
-if (exists $query->{callback}) { # /!\ callback can be tainted
+if (exists $query->{callback}) { # /!\ callback can be tainted [if has ');' etc. ]
    print "Content-Type: text/javascript\r\n\r\n";
    printf qq'%s(%s)\n',$query->{callback},$jsresp;
 } else {

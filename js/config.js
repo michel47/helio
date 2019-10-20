@@ -46,6 +46,8 @@ function callback(tag) {
    }
 
    var buf = bod.innerHTML;
+       buf = buf.replace(/%ip%/g,json.ip);
+       buf = buf.replace(/%tics%/g,json.tics);
        buf = buf.replace(/%url%/g,url);
        buf = buf.replace(/%loc%/g,loc);
        buf = buf.replace(/%domain%/g,domain);

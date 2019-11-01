@@ -20,8 +20,13 @@ if ($dbug) {
 } 
 
 # ---------------------------------------------------------
-if (exists $ENV{HTTP_METHOD} && $ENV{HTTP_METHOD} eq 'OPTIONS') {
+if (exists $ENV{REQUEST_METHOD} && $ENV{REQUEST_METHOD} eq 'OPTIONS') {
+  print "Status: 204 No data\n";
   print "Access-Control-Allow-Headers: content-type, application/x-www-form-urlencoded\n";
+  print "Access-Control-Allow-Origin: *\n";
+#  print "Content-Type: text/javascript\r\n\r\n";
+   printf "alert('pre-flight %s');\n",$ENV{HTTP_ORIGIN};
+  exit $?;
 }
 # CORS header
 if (exists $ENV{HTTP_ORIGIN} && $ENV{HTTP_ORIGIN} ne '') {
@@ -53,7 +58,7 @@ local $/ = undef; # /!\ destroy DNS read ...
 #printf "DBUG: [%s]\n",join"\n",Dump(&get_rrecord('exemple.com','A'));
 #printf "DBUG: query=[%s]\n",join"\n",Dump($query); exit;
 #printf "X-CONTENT_TYPE: %s\n",$ENV{CONTENT_TYPE};
-printf "X-post: %s\n",$post;
+printf "X-post: %s\n",$post if $post;
 
 if ($ENV{CONTENT_TYPE} eq 'application/x-www-form-urlencoded') {
 #  print "Content-Type: text/plain; charset=utf-8\r\n\r\n";
@@ -84,7 +89,7 @@ if ($query->{echo}) {
     # only Domain and Type keys are copied from the json object
     $query->{domain} = $jspost->{Domain} if exists $jspost->{Domain};
     $query->{type} = $jspost->{Type} if exists $jspost->{Type};
-    printf "X-query: %s %s\n",$query->{domain},$query->{type};
+    printf "X-query: %s %s\n",$query->{domain},$query->{type} if (exists $query->{domain});
 }
 
 my $ip = $ENV{REMOTE_ADDR} if exists $ENV{REMOTE_ADDR};

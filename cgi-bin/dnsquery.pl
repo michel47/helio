@@ -20,6 +20,9 @@ if ($dbug) {
 } 
 
 # ---------------------------------------------------------
+if (exists $ENV{HTTP_METHOD} && $ENV{HTTP_METHOD} eq 'OPTIONS') {
+  print "Access-Control-Allow-Headers: content-type, application/x-www-form-urlencoded\n";
+}
 # CORS header
 if (exists $ENV{HTTP_ORIGIN} && $ENV{HTTP_ORIGIN} ne '') {
   printf "Access-Control-Allow-Origin: %s\n",$ENV{HTTP_ORIGIN};

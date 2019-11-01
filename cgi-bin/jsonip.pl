@@ -3,14 +3,8 @@
 my $ip = $ENV{REMOTE_ADDR};
 
 binmode(STDOUT);
+use if -e '/usr/local/share/perl5/cPanelUserConfig.pm', cPanelUserConfig;
 
-
-our $dbug=0; $dbug = 1 if ($ENV{QUERY_STRING} =~ m/dbug=/);
-
-if ($dbug) {
-   binmode(STDOUT);
-   print "Content-Type: text/html\r\n\r\n";
-} 
 
 my $query = {}; 
 our $dbug = $1 if ($ENV{QUERY_STRING} =~ m/dbug=(\d+)/);
@@ -21,15 +15,27 @@ if (exists $ENV{QUERY_STRING}) {
       $query->{$p} = $v; 
    }   
 }
+if ($dbug) {
+   binmode(STDOUT);
+   print "Content-Type: text/plain\r\n\r\n";
+} 
 
-
-print "Content-Type: text/javascript\r\n\r\n";
-print "\r\n\r\n";
+# ---------------------------------------------------------
+# CORS header
+if (exists $ENV{HTTP_ORIGIN}) {
+  printf "Access-Control-Allow-Origin: %s\n",$ENV{HTTP_ORIGIN};
+} else {
+  print "Access-Control-Allow-Origin: *\n";
+}
+# ---------------------------------------------------------
+my $msg = "Hello, World!";
 
 if (exists $query->{callback}) {
-   printf qq'%s({"ip":"%s","tic":"%s","msg":"Hello!"})\n',$query->{callback},$ip,$^T;
+   print "Content-Type: text/javascript\r\n\r\n";
+   printf qq'%s({"ip":"%s","tic":"%s","msg":"%s"})\n',$query->{callback},$ip,$^T,$msg;
 } else {
-   printf qq'{"ip":"%s","tic":"%s","msg":"Hello!"}\n',$ip,$^T;
+   print "Content-Type: application/json\r\n\r\n";
+   printf qq'{"ip":"%s","tic":"%s","msg":"%s"}\n',$ip,$^T,$msg;
 }
 
 if ($dbug) {

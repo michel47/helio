@@ -18,9 +18,6 @@ if ($dbug) {
 
    printf "X-INC: %s\n",join',',@INC;
 } 
-if (exists $ENV{REQUEST_METHOD}) {
-  printf "X-Method: %s\n",$ENV{REQUEST_METHOD};
-}
 
 # ---------------------------------------------------------
 if (exists $ENV{REQUEST_METHOD} && $ENV{REQUEST_METHOD} eq 'OPTIONS') {
@@ -36,6 +33,9 @@ if (exists $ENV{HTTP_ORIGIN} && $ENV{HTTP_ORIGIN} ne '') {
   printf "Access-Control-Allow-Origin: %s\n",$ENV{HTTP_ORIGIN};
 } else {
   print "Access-Control-Allow-Origin: *\n";
+}
+if (exists $ENV{REQUEST_METHOD}) {
+  printf "X-Method: %s\n",$ENV{REQUEST_METHOD};
 }
 # ---------------------------------------------------------
 use if -e '/usr/local/share/perl5/cPanelUserConfig.pm', cPanelUserConfig;

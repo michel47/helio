@@ -1,5 +1,10 @@
 #!/usr/bin/perl
 
+if (exists $ENV{HTTP_ORIGIN} && $ENV{HTTP_ORIGIN} ne '') {
+  printf "Access-Control-Allow-Origin: %s\n",$ENV{HTTP_ORIGIN};
+} else {
+  print "Access-Control-Allow-Origin: *\n";
+}
 print "Content-Type: text/html; charset=utf-8\r\n\r\n";
 
 if (0) {

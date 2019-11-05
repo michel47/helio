@@ -18,6 +18,9 @@ if ($dbug) {
 
    printf "X-INC: %s\n",join',',@INC;
 } 
+if (exists $ENV{REQUEST_METHOD}) {
+  printf "X-Method: %s\n",$ENV{REQUEST_METHOD};
+}
 
 # ---------------------------------------------------------
 if (exists $ENV{REQUEST_METHOD} && $ENV{REQUEST_METHOD} eq 'OPTIONS') {
@@ -112,8 +115,14 @@ $jsresp =~ s/,/,\n/g if $dbug;
 if (exists $query->{callback}) { # /!\ callback can be tainted [if has ');' etc. ]
    print "Content-Type: text/javascript\r\n\r\n";
    printf qq'%s(%s)\n',$query->{callback},$jsresp;
-} else {
+} elsif ($query->{fmt} eq 'json') {
    print "Content-Type: application/json\r\n\r\n";
+   printf qq'%s\n',$jsresp;
+} elsif ($query->{fmt} eq 'txt') {
+   print "Content-Type: text/plain\r\n\r\n";
+   printf qq'%s\n',$jsresp;
+} else {
+   print "Content-Type: text/plain\r\n\r\n";
    printf qq'%s\n',$jsresp;
 }
 

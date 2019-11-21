@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+printf "Access-Control-Allow-Headers: %\n",'content-type, application/x-www-form-urlencoded';
 if (exists $ENV{HTTP_ORIGIN} && $ENV{HTTP_ORIGIN} ne '') {
   printf "Access-Control-Allow-Origin: %s\n",$ENV{HTTP_ORIGIN};
 } else {

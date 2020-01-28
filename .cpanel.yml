@@ -2,7 +2,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/michelc/public_html/
-    - cp -p index.html $DEPLOYPATH
-    - cp -p style.css $DEPLOYPATH
+    - cp -p _site/index.html $DEPLOYPATH
+    - cp -p _site/style.css $DEPLOYPATH
     - rsync -avuz sites/ $DEPLOYPATH/sites
     - rsync -avuz cgi-bin/ $DEPLOYPATH/cgi-bin

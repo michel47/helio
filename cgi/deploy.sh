@@ -18,8 +18,8 @@ git pull
 
 # deploy : i.e. mirroring to public_html ...
 cd ~/public_html
-rsync -avuz ../repositories/helio/index.html .
-rsync -avuz ../repositories/helio/style.css .
+rsync -avuz ../repositories/helio/_site/index.html .
+rsync -avuz ../repositories/helio/_site/style.css .
 rsync -avuz ../repositories/helio/cgi-bin/ cgi-bin
 rsync -avuz ../repositories/helio/cgi/ cgi
 #rm cgi-bin

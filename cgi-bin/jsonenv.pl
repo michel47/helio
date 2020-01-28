@@ -25,6 +25,7 @@ if (exists $ENV{HTTP_ORIGIN}) {
   print "Access-Control-Allow-Origin: *\n";
 }
 # ---------------------------------------------------------
+use if -e '/usr/local/share/perl5/cPanelUserConfig.pm', cPanelUserConfig;
 use JSON qw(encode_json);
 $ENV{pid} = $$;
 my $jsenv = encode_json( \%ENV );

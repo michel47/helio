@@ -1,6 +1,10 @@
 #!/usr/bin/perl
 
 # This script redirect to a mapped URL when clicking on a legal form !
+#
+# https://iph.heliohost.org/cgi-bin/bounce.pl
+# https://publink.ml/cgi-bin/bounce.pl
+# https://safersm.ml/cgi-bin/bounce.pl (m69@iph.heliohost.org)
 
 
 use if -e '/usr/local/share/perl5/cPanelUserConfig.pm', cPanelUserConfig;
@@ -34,7 +38,16 @@ foreach my $e (@params) {
   $param->{$p} = $v;
 }
 
-
+# --------------------------------------
+my $who;
+if ($ENV{HTTP_HOST} =~ m/ipfs/) {
+  $who = 'interPlanetary Humanity';
+} elsif ($ENV{HTTP_HOST} =~ m/safer/) {
+  $who = 'Safer™';
+} else {
+  $who = 'publink';
+}
+# --------------------------------------
 
 if ($dbug) {
   print "Content-Type: text/plain\r\n";
@@ -150,20 +163,20 @@ if (defined $param->{slink}) {
      print qq'<br><br>Date: <input type=date name=date">\n';
      print qq'<br>Signature: <input type=password name=sig">\n';
      print "</div>\n";
-     printf "<br><br><small align=right id=ftnote>note: Your <a href=http://https://whatismyipaddress.com/ip/%s>IP address</a> has just been logged (%s).</small>\n",$ip,$ENV{REMOTE_ADDR};
+     printf "<br><br><small align=right id=ftnote>note: Votre <a href=http://https://whatismyipaddress.com/ip/%s>Adresse IP</a> a été enregistrée (%s).</small>\n",$ip,$ENV{REMOTE_ADDR};
      } else {
      print "Please fill the form below (all fields are optional)\n";
      print "<br><br>Thanks.\n";
-     print "<br>--Safer℠ Patrol\n";
+     printf "<br>--%s Patrol\n",$who;
      print "<h4>Legal claims</h4>\n";
      print qq'I undersigned, <input type=text name=name placeholder="(name)",>\n';
      print qq'<br>testify I am who I really am\n<br>*AND*\n<br>'; 
-     print '<br><input type=checkbox id=chkb onclick="myfunc()"> by checking this box, you certify you are a human being not operating any sort of automated tasks,';
+     print '<br><input type=checkbox id=chkb onclick="myfunc()"> by checking this box, I certify I am a human being not operating any sort of automated tasks,';
      printf "<br>and I will comply with the rules of the group (%s) I am joining.\n",$desc;
      print qq'<br><br>Date: <input type=date name=date">\n';
      print qq'<br>Signature: <input type=password name=sig">\n';
      print "</div>\n";
-     printf "<br><br><small align=right id=ftnote>note: Votre <a href=http://https://whatismyipaddress.com/ip/%s>Adresse IP</a> a été enregistrée (%s).</small>\n",$ip,$ENV{REMOTE_ADDR};
+     printf "<br><br><small align=right id=ftnote>note: Your <a href=http://https://whatismyipaddress.com/ip/%s>IP address</a> has just been logged (%s).</small>\n",$ip,$ENV{REMOTE_ADDR};
      }
      printf <<'SCRPT',substr($url,0,10),substr($url,10);
 <script> function myfunc(){

@@ -32,6 +32,8 @@ my $ruser = $user || $ENV{REMOTE_USER} || 'sybil';
 printf "From %s %s\n",$name,&mdate($^T);
 printf "From: %s\n",$ruser;
 printf "Subject: stdin (POST content)\n",$user;
+printf "Content-Type: %s\n",$ENV{CONTENT_TYPE};
+printf "Content-Length %s\n",$ENV{CONTENT_LENGTH};
 
 print "\n\n";
 print "$buf.\n";

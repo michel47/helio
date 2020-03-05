@@ -13,7 +13,9 @@ git reset --hard origin/master
 git clean -f -d
 fi
 
+echo // git status:
 git status
+echo // git pull:
 git pull
 
 # deploy : i.e. mirroring to public_html ...

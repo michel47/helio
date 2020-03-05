@@ -6,6 +6,8 @@ set -x
 
 # getting a clean "checkout"
 cd ~/repositories/helio
+git commit -a -m "emergency commit"
+
 # reset see [*](https://www.ocpsoft.org/tutorials/git/reset-and-sync-local-respository-with-remote-branch/)
 if false; then
 git fetch origin

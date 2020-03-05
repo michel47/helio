@@ -8,6 +8,7 @@ set -x
 cd ~/repositories/helio
 git add .cpanel.yml
 git commit -a -m "emergency commit"
+git reset --hard .cpanel.yml
 
 # reset see [*](https://www.ocpsoft.org/tutorials/git/reset-and-sync-local-respository-with-remote-branch/)
 if false; then

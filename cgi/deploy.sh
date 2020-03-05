@@ -1,4 +1,5 @@
 #
+#
 
 # https://iph.heliohost.org/cgi/testing.pl/cmd.pl
 set -e
@@ -6,9 +7,15 @@ set -x
 
 # getting a clean "checkout"
 cd ~/repositories/helio
-git add .cpanel.yml
-git commit -a -m "emergency commit"
-git reset --hard .cpanel.yml
+if false; then
+#git add .cpanel.yml
+#git commit -a -m "emergency commit"
+fi
+
+if true; then
+git reset --hard .cpanel.yml origin.master
+git checkout .cpanel.yml
+fi
 
 # reset see [*](https://www.ocpsoft.org/tutorials/git/reset-and-sync-local-respository-with-remote-branch/)
 if false; then

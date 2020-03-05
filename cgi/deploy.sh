@@ -13,12 +13,12 @@ if false; then
 fi
 
 if true; then
-git reset --hard .cpanel.yml origin.master
-git checkout .cpanel.yml
+git reset --hard origin.master
+git restore
 fi
 
 # reset see [*](https://www.ocpsoft.org/tutorials/git/reset-and-sync-local-respository-with-remote-branch/)
-if false; then
+if true; then
 git fetch origin
 git reset --hard origin/master
 git clean -f -d

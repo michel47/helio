@@ -8,17 +8,17 @@ set -x
 # getting a clean "checkout"
 cd ~/repositories/helio
 if false; then
-#git add .cpanel.yml
-#git commit -a -m "emergency commit"
+git add .cpanel.yml
+git commit -a -m "emergency commit"
 fi
 
-if true; then
+if false; then
 git reset --hard origin.master
 git restore
 fi
 
 # reset see [*](https://www.ocpsoft.org/tutorials/git/reset-and-sync-local-respository-with-remote-branch/)
-if true; then
+if false; then
 git fetch origin
 git reset --hard origin/master
 git clean -f -d

@@ -1,7 +1,16 @@
 #!/usr/bin/perl
 
-#use lib $ENV{HOME}.'/site/lib';
-#use UTIL qw(get_spot);
+my $query = {};
+our $dbug = $1 if ($ENV{QUERY_STRING} =~ m/dbug=(\d+)/);
+if (exists $ENV{QUERY_STRING}) {
+   my @params = split /\&/,$ENV{QUERY_STRING};
+   foreach my $e (@params) {
+      my ($p,$v) = split/=/,$e;
+      $v =~ s/%(..)/chr(hex($1))/eg; # unhtml-ize (urldecoded)
+      $query->{$p} = $v;
+   }
+}
+
 
 binmode(STDOUT);
 # ---------------------------------------------------------
@@ -13,15 +22,15 @@ if (exists $ENV{HTTP_ORIGIN}) {
 }
 # ---------------------------------------------------------
 
-my $spot = &get_spot($^T,$ENV{HTTP_HOST}||'dynsm.ml');
 
-if ($json) {
-  print "Content-Type: application/json\r\n\r\n";
- printf qq'{"tic":%s}\n',&get;
+if ($query->{json}) {
+   print "Content-Type: application/json\r\n\r\n";
+   printf qq'{"tic":%s,"nounce":%s,"dotip":"%s","pubip":"%s","seed":f%08x,"salt":%s,"spot":%s}\n',&get_spot($^T,$ENV{HTTP_HOST}||'dynsm.ml');
 } else {
-print "Content-Type: text/plain\r\n\r\n";
+   print "Content-Type: text/plain\r\n\r\n";
+   my $spot = &get_spot($^T,$ENV{HTTP_HOST}||'dynsm.ml');
+   print $spot,"\n";
 }
-print $spot,"\n";
 exit $?;
 
 # -----------------------------------------------------------------------

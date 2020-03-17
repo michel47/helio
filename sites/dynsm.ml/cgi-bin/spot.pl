@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+use if -e '/usr/local/share/perl5/cPanelUserConfig.pm', cPanelUserConfig;
+
 my $query = {};
 our $dbug = $1 if ($ENV{QUERY_STRING} =~ m/dbug=(\d+)/);
 if (exists $ENV{QUERY_STRING}) {

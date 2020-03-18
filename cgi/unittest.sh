@@ -13,5 +13,8 @@ perl ../sites/$path/$script
 echo "// curl testing.pl execution: "
 curl http://yoogle.com:8088/helio/cgi-bin/testing.pl/$path/$script;
 
-echo "// curl ../sites/$path execution: "
+echo "// curl local execution: "
 curl http://yoogle.com:8088/helio/sites/$path/$script;
+
+echo "// curl helio execution: "
+curl http://iph.heliohost.org/sites/$path/$script;

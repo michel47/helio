@@ -2,6 +2,10 @@
 
 use if -e '/usr/local/share/perl5/cPanelUserConfig.pm', cPanelUserConfig;
 
+my $logd = '../logs';
+my $logf = $logd.'/spot.log';
+mkdir $logd unless -d $logd;
+
 my $query = {};
 our $dbug = $1 if ($ENV{QUERY_STRING} =~ m/dbug=(\d+)/);
 if (exists $ENV{QUERY_STRING}) {
@@ -28,7 +32,7 @@ my $spot;
 if ($query->{json}) {
    print "Content-Type: application/json\r\n\r\n";
    my @a = &get_spot($^T,$ENV{HTTP_HOST}||'dynsm.ml');
-   printf qq'{"tic":%s,"nounce":%s,"dotip":"%s","pubip":"%s","seed":f%08x,"salt":%s,"spot":%s,"lg":%s,"lt":%s,"xpi":%s,"ypi":%s}\n',@a;
+   printf qq'{"tic":%s,"nonce":%s,"dotip":"%s","pubip":"%s","seed":f%08x,"salt":%s,"spot":%s,"lg":%s,"lt":%s,"xpi":%s,"ypi":%s,"logf":"%s"}\n',@a,$logf;
    $spot = $a[6];
 } else {
    print "Content-Type: text/plain\r\n\r\n";
@@ -39,8 +43,7 @@ if ($query->{json}) {
 # log ...
 # ---------------------------------------------------------
 # canonic append (semaphore) 
-my $logf = '../logs/spot.log';
-my $semf = '../logs/spot.log.lck';
+my $semf = $logf.'.lck';
 local *SEM; open *SEM,'>',"$semf" or die "X-Error: could not open $semf - $!";
 # LOCK_SH, LOCK_EX, LOCK_NB, LOCK_UN.
 # 1        2        4        8

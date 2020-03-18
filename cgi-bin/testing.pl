@@ -19,13 +19,14 @@ if (exists $ENV{PATH_INFO}) {
    my $p = index $ENV{PATH_INFO},'/',1;
    $p = length$ENV{PATH_INFO} if ($p < 0);
    $ENV{SCRIPT_NAME} = '.'. substr($ENV{PATH_INFO},0,$p,'');
+   printf qq'SCRIPT_NAME="%s";<br>\n',$ENV{SCRIPT_NAME};
    #$ENV{SCRIPT_NAME} =~ s,testing.pl,$SCRIPT,;
    $ENV{PATH_TRANSLATED} = $ENV{DOCUMENT_ROOT}.$ENV{PATH_INFO};
    if ($ENV{PATH_INFO} eq '') {
      $ENV{PATH_INFO} = undef;
      delete $ENV{PATH_INFO};
    } else {
-     printf qq'PATH_INFO="%s";\n',$ENV{PATH_INFO};
+     printf qq'PATH_INFO="%s";<br>\n',$ENV{PATH_INFO};
    }
    print "$^X <a href=$ENV{SCRIPT_NAME}>$ENV{SCRIPT_NAME}</a><br>\n<pre><code>"; # /!\\ INSECURE
    my $status = system qq'$^X "$ENV{SCRIPT_NAME}" 2>&1'; # /!\ exploitable

@@ -16,11 +16,23 @@ if (0) {
    print "</pre>\n";
 }
 if (exists $ENV{PATH_INFO}) {
-   my $p = index $ENV{PATH_INFO},'/',1;
-   $p = length$ENV{PATH_INFO} if ($p < 0);
-   $ENV{SCRIPT_NAME} = '.'. substr($ENV{PATH_INFO},0,$p,'');
+   printf qq'PATH_INFO="%s";<br>\n',$ENV{PATH_INFO};
+   
+   if ($ENV{PATH_INFO} =~  m'^/([^/]*)/cgi-bin') { # proxying dyn℠ site
+     my $p0 = length($&)+1;
+     my $p1 = index $ENV{PATH_INFO},'/',$p0+1;
+        $p1 = length$ENV{PATH_INFO} if ($p1 < 0);
+     $ENV{SCRIPT_NAME} = '../sites'.substr($ENV{PATH_INFO},0,$p1);
+     $ENV{PATH_INFO} = substr($ENV{PATH_INFO},$p1);
+   } else {
+      my $p = index $ENV{PATH_INFO},'/',1;
+      $p = length$ENV{PATH_INFO} if ($p < 0);
+      $ENV{SCRIPT_NAME} = '.'. substr($ENV{PATH_INFO},0,$p,'');
+      #$ENV{SCRIPT_NAME} =~ s,testing.pl,$SCRIPT,;
+   }
+   printf qq'PATH_INFO="%s";<br>\n',$ENV{PATH_INFO};
    printf qq'SCRIPT_NAME="%s";<br>\n',$ENV{SCRIPT_NAME};
-   #$ENV{SCRIPT_NAME} =~ s,testing.pl,$SCRIPT,;
+
    $ENV{PATH_TRANSLATED} = $ENV{DOCUMENT_ROOT}.$ENV{PATH_INFO};
    if ($ENV{PATH_INFO} eq '') {
      $ENV{PATH_INFO} = undef;

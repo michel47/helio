@@ -32,7 +32,7 @@ my $spot;
 if ($query->{json}) {
    print "Content-Type: application/json\r\n\r\n";
    my @a = &get_spot($^T,$ENV{HTTP_HOST}||'dynsm.ml');
-   printf qq'{"tic":%s,"nonce":%s,"dotip":"%s","pubip":"%s","seed":f%08x,"salt":%s,"spot":%s,"lg":%s,"lt":%s,"xpi":%s,"ypi":%s,"logf":"%s"}\n',@a,$logf;
+   printf qq'{"tic":%s,"nonce":%s,"dotip":"%s","pubip":"%s","seed":"f%08x","salt":%s,"spot":%s,"lg":%s,"lt":%s,"xpi":%s,"ypi":%s,"logf":"%s"}\n',@a,$logf;
    $spot = $a[6];
 } else {
    print "Content-Type: text/plain\r\n\r\n";

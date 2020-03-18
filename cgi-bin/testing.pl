@@ -16,7 +16,7 @@ if (0) {
    print "</pre>\n";
 }
 if (exists $ENV{PATH_INFO}) {
-   printf qq'PATH_INFO="%s";<br>\n',$ENV{PATH_INFO};
+   #printf qq'INITIAL_PATH_INFO="%s";<br>\n',$ENV{PATH_INFO};
    
    if ($ENV{PATH_INFO} =~  m'^/([^/]*)/cgi-bin') { # proxying dyn℠ site
      my $p0 = length($&)+1;
@@ -30,8 +30,8 @@ if (exists $ENV{PATH_INFO}) {
       $ENV{SCRIPT_NAME} = '.'. substr($ENV{PATH_INFO},0,$p,'');
       #$ENV{SCRIPT_NAME} =~ s,testing.pl,$SCRIPT,;
    }
-   printf qq'PATH_INFO="%s";<br>\n',$ENV{PATH_INFO};
    printf qq'SCRIPT_NAME="%s";<br>\n',$ENV{SCRIPT_NAME};
+   printf qq'PATH_INFO="%s";<br>\n',$ENV{PATH_INFO};
 
    $ENV{PATH_TRANSLATED} = $ENV{DOCUMENT_ROOT}.$ENV{PATH_INFO};
    if ($ENV{PATH_INFO} eq '') {

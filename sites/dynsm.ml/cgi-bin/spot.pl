@@ -24,16 +24,39 @@ if (exists $ENV{HTTP_ORIGIN}) {
 }
 # ---------------------------------------------------------
 
-
+my $spot;
 if ($query->{json}) {
    print "Content-Type: application/json\r\n\r\n";
-   printf qq'{"tic":%s,"nounce":%s,"dotip":"%s","pubip":"%s","seed":f%08x,"salt":%s,"spot":%s}\n',&get_spot($^T,$ENV{HTTP_HOST}||'dynsm.ml');
+   my @a = &get_spot($^T,$ENV{HTTP_HOST}||'dynsm.ml');
+   printf qq'{"tic":%s,"nounce":%s,"dotip":"%s","pubip":"%s","seed":f%08x,"salt":%s,"spot":%s,"lg":%s,"lt":%s,"xpi":%s,"ypi":%s}\n',@a;
+   $spot = $a[6];
 } else {
    print "Content-Type: text/plain\r\n\r\n";
-   my $spot = &get_spot($^T,$ENV{HTTP_HOST}||'dynsm.ml');
+   $spot = &get_spot($^T,$ENV{HTTP_HOST}||'dynsm.ml');
    print $spot,"\n";
 }
+
+# log ...
+# ---------------------------------------------------------
+# canonic append (semaphore) 
+my $logf = '../logs/spot.log';
+my $semf = '../logs/spot.log.lck';
+local *SEM; open *SEM,'>',"$semf" or die "X-Error: could not open $semf - $!";
+# LOCK_SH, LOCK_EX, LOCK_NB, LOCK_UN.
+# 1        2        4        8
+flock(SEM, 2) or die "X-Error: could not lock - $!"; # LOCK_EX (Semaphore)
+#--
+# 
+local *LOG; open LOG,'>>',$logf;
+printf LOG qq'%u: %u\n',$^T,$spot;
+close LOG;
+flock(SEM, 8) or die "X-Error: could not unlock - $!"; # LOCK_UN
+close SEM; # release lock
+unlink $semf if (-e $semf);
+# ---------------------------------------------------------
+#
 exit $?;
+
 
 # -----------------------------------------------------------------------
 sub get_spot {
@@ -60,9 +83,19 @@ sub get_spot {
       printf "salt: %s\n",$salt;
    }
    my $time = 59 * int (($tic - 58) / 59) + $salt;
-   my $spot = $time ^ $nip ^ $lip ^ $nonce;
+   my $coord = $nip ^ $lip;
+   my $spot = $time ^ $coord ^ $nonce;
+
+   my $pi = atan2(0,-1);
+   my $dia = int ( sqrt( (1<<32) / $pi ) + 0.49999 );
+   my $pid = int ( sqrt( $pi * (1<<32) ) + 0.49999 );
+   my $ypi = int($coord/$pid);
+   my $xpi = $coord - $ypi * $pid;
+   my $lg = 360 * $xpi / $pid;
+   my $lt = 180 * (1 - $ypi / $dia) - 90; # 0 is North pole !
+
    if (wantarray) {
-     return ($tic,$nounce,$dotip,%pubip,$seed,$salt,$spot);
+     return ($tic,$nonce,$dotip,$pubip,$seed,$salt,$spot,$lg,$lt,$xpi,$ypi);
    } else {
      return $spot;
    }
